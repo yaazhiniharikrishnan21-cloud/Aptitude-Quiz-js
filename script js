@@ -1,48 +1,92 @@
 const questions = [
-    {q: "30% of 90 =?", options: ["27", "30", "33", "36"], answer: 0},
-    {q: "If CP=100, SP=120, Profit% =?", options: ["10%", "15%", "20%", "25%"], answer: 2},
-    {q: "Average of 10, 20, 30 =?", options: ["15", "20", "25", "60"], answer: 1},
-    {q: "A:B = 2:3, B = 15, A =?", options: ["5", "10", "12", "20"], answer: 1},
-    {q: "Speed=60kmph, Time=2hr, Distance =?", options: ["30km", "60km", "120km", "180km"], answer: 2}
+    {
+        question: "30% of 90 =?",
+        options: ["30", "27", "29", "31"],
+        answer: 1
+    },
+    {
+        question: "The average of 10, 20, 30, 40, 50 is?",
+        options: ["25", "30", "35", "40"],
+        answer: 1
+    },
+    {
+        question: "If 5 workers complete a job in 10 days, how many days for 10 workers?",
+        options: ["5", "10", "15", "20"],
+        answer: 0
+    },
+    {
+        question: "What is 15% of 200?",
+        options: ["15", "20", "30", "45"],
+        answer: 2
+    },
+    {
+        question: "A train travels 60 km in 1 hour. Speed in m/s?",
+        options: ["16.67", "60", "100", "216"],
+        answer: 0
+    }
 ];
 
-let currentQ = 0, score = 0, selected = null;
+let currentQ = 0;
+let score = 0;
+let selected = null;
 
 function loadQuestion() {
-    document.getElementById("question").innerText = Q${currentQ+1}: ${questions[currentQ].q};
+    document.getElementById("question").innerText = Q${currentQ + 1}: ${questions[currentQ].question};
     const optionsDiv = document.getElementById("options");
     optionsDiv.innerHTML = "";
+
     questions[currentQ].options.forEach((opt, i) => {
         const div = document.createElement("div");
         div.className = "option";
         div.innerText = opt;
+        div.style.cssText = "padding:12px; margin:8px 0; border:2px solid #ddd; border-radius:8px; cursor:pointer; background:#f9f9f9;";
         div.onclick = () => selectOption(i, div);
         optionsDiv.appendChild(div);
     });
+
     selected = null;
+    document.getElementById("next-btn").style.display = "none";
 }
 
 function selectOption(i, div) {
-    document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+    document.querySelectorAll(".option").forEach(o => {
+        o.classList.remove("selected");
+        o.style.background = "#f9f9f9";
+        o.style.borderColor = "#ddd";
+    });
+
     div.classList.add("selected");
+    div.style.background = "#e3f2fd";
+    div.style.borderColor = "#2196F3";
     selected = i;
+    document.getElementById("next-btn").style.display = "block";
 }
 
 document.getElementById("next-btn").onclick = () => {
-    if (selected === null) { alert("Option choose pannu da!"); return; }
+    if (selected === null) {
+        alert("Option choose pannu da!");
+        return;
+    }
+
     if (selected === questions[currentQ].answer) score++;
+
     currentQ++;
-    if (currentQ < questions.length) loadQuestion();
-    else showResult();
+    if (currentQ < questions.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
 };
 
 function showResult() {
     document.getElementById("question-box").style.display = "none";
     document.getElementById("result-box").style.display = "block";
-    document.getElementById("score").innerText = score;
-    let msg = score >= 4? "Sabash Thalaivi! 🔥 You’re Job Ready!" : 
-              score >= 3? "Good! Innum konjam practice podu 💪" : 
+    document.getElementById("score").innerText = ${score}/${questions.length};
+
+    let msg = score >= 4? "Sabash Thalaivi! 🔥 You’re Job Ready!" :
+              score >= 3? "Good! Innum konjam practice podu 💪" :
               "No problem! Daily practice pannu, gethu aayiruva 🚀";
+
     document.getElementById("message").innerText = msg;
 }
 
