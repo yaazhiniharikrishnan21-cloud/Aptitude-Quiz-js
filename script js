@@ -1,0 +1,49 @@
+const questions = [
+    {q: "30% of 90 =?", options: ["27", "30", "33", "36"], answer: 0},
+    {q: "If CP=100, SP=120, Profit% =?", options: ["10%", "15%", "20%", "25%"], answer: 2},
+    {q: "Average of 10, 20, 30 =?", options: ["15", "20", "25", "60"], answer: 1},
+    {q: "A:B = 2:3, B = 15, A =?", options: ["5", "10", "12", "20"], answer: 1},
+    {q: "Speed=60kmph, Time=2hr, Distance =?", options: ["30km", "60km", "120km", "180km"], answer: 2}
+];
+
+let currentQ = 0, score = 0, selected = null;
+
+function loadQuestion() {
+    document.getElementById("question").innerText = Q${currentQ+1}: ${questions[currentQ].q};
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+    questions[currentQ].options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt;
+        div.onclick = () => selectOption(i, div);
+        optionsDiv.appendChild(div);
+    });
+    selected = null;
+}
+
+function selectOption(i, div) {
+    document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+    div.classList.add("selected");
+    selected = i;
+}
+
+document.getElementById("next-btn").onclick = () => {
+    if (selected === null) { alert("Option choose pannu da!"); return; }
+    if (selected === questions[currentQ].answer) score++;
+    currentQ++;
+    if (currentQ < questions.length) loadQuestion();
+    else showResult();
+};
+
+function showResult() {
+    document.getElementById("question-box").style.display = "none";
+    document.getElementById("result-box").style.display = "block";
+    document.getElementById("score").innerText = score;
+    let msg = score >= 4? "Sabash Thalaivi! 🔥 You’re Job Ready!" : 
+              score >= 3? "Good! Innum konjam practice podu 💪" : 
+              "No problem! Daily practice pannu, gethu aayiruva 🚀";
+    document.getElementById("message").innerText = msg;
+}
+
+loadQuestion();
